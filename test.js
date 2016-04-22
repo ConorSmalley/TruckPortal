@@ -1,5 +1,6 @@
 $( document ).ready(function() {
   var masterRef = new Firebase("https://dafchecker.firebaseio.com/");
+  var jobsRef = new Firebase("https://dafchecker.firebaseio.com/Jobs");
   masterRef.authWithPassword({
     "email": "conorsmalley93@gmail.com",
     "password": "Password1"
@@ -15,16 +16,13 @@ $( document ).ready(function() {
 
   if(masterRef.getAuth()){
     console.log("Authenticated!");
-    var jobsRef = new Firebase("https://dafchecker.firebaseio.com/Jobs");
-
-    // jobsRef.push({
-    //   city: "Sheffield",
-    //   Street: "Hardcastle Road",
-    // });
-
   }
 });
 
 function listJobs(){
+  var jobsRef = new Firebase("https://dafchecker.firebaseio.com/Jobs");
   console.log("listing jobs now");
+  jobsRef.orderByChild("child_added").on("child_added", function(snapshot) {
+    console.log(snapshot.key() + " is " + snapshot.val().Status);
+  });
 }
