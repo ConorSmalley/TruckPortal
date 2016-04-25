@@ -6,6 +6,10 @@ if(isset($_SESSION["Username"])){
 }else{
     header("Location: login.php");
 }
+if( $_GET["JobId"]) {
+} else{
+    header("Location: index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,59 +81,40 @@ if(isset($_SESSION["Username"])){
 </div><!-- /.container-fluid -->
 </nav>
 <div class="containter-fluid">
-    <div class="col-md-4" id="jobList">
-        <h1>Unassigned Job's</h1>
+    <div class="col-md-6" id="jobList">
         <?php
 
         // Create the query - here we grab everything from the table
-        $stmt = $db->query('SELECT * FROM tbl_Job WHERE tbl_Job.JobAssignedTo = ""');
+        $stmt = $db->query('SELECT * FROM tbl_Job WHERE tbl_Job.JobId =' . $_GET['JobId']);
 
         while($rows = $stmt->fetch()){
-            jobCell($rows);
+            echo '<a href="job.php?JobId=' .$rows['JobId'] . '"><div class="container-fluid">';
+            echo '<div class="col-md-8">';
+            echo $rows['JobName'];
+            echo '</div>';
+
+            echo '<div class="col-md-4">';
+                echo $rows['JobStatus'];
+            echo '</div>';
+
+            echo '<div class="col-md-11 col-md-offset-1">';
+            echo $rows['JobDescription'];
+            echo '</div>';
+            echo '</div></a>';
+
+            // This is for the empty line after the job
+            echo '<a href=""><div class="row-fluid">';
+            echo '<div class="col-md-4">';
+            echo '&nbsp';
+            echo '</div>';
+            echo '<div class="col-md-8">';
+            echo '&nbsp';
+            echo '</div>';
+            echo '</div></a>';
         };
         ?>
     </div>
-    <div class="col-md-4" id="jobList">
-        <h1>My Job's</h1>
-        <?php
 
-        // Create the query - here we grab everything from the table
-        $stmt = $db->query('SELECT * FROM tbl_Job INNER JOIN tbl_User ON tbl_Job.JobAssignedTo = tbl_User.UserId WHERE tbl_User.UserId = 1');
-
-        while($rows = $stmt->fetch()){
-            jobCell($rows);
-            // echo '<a href=""><div class="container-fluid well">';
-            // echo '<div class="col-md-8">';
-            // echo $rows['JobName'];
-            // echo '</div>';
-            //
-            // echo '<div class="col-md-4">';
-            // // if ($rows['JobStatus'] == 0) {
-            // // }else{
-            //     echo $rows['JobStatus'];
-            // // }
-            // echo '</div>';
-            //
-            // echo '<div class="col-md-11 col-md-offset-1">';
-            // echo $rows['JobDescription'];
-            // echo '</div>';
-            // echo '</div></a>';
-            //
-            //
-            //
-            //
-            // // This is for the empty line after the job
-            // echo '<a href=""><div class="row-fluid">';
-            // echo '<div class="col-md-4">';
-            // echo '&nbsp';
-            // echo '</div>';
-            // echo '<div class="col-md-8">';
-            // echo '&nbsp';
-            // echo '</div>';
-            // echo '</div></a>';
-        };
-        ?>
-    </div>
 </div>
 <!-- Latest compiled and minified JavaScript -->
 <script src="jquery-2.2.3.js"></script>
