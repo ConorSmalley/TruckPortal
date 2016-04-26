@@ -6,10 +6,6 @@ if(isset($_SESSION["Username"])){
 }else{
     header("Location: login.php");
 }
-if( $_GET["JobId"]) {
-} else{
-    header("Location: index.php");
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -27,40 +23,18 @@ if( $_GET["JobId"]) {
 <body>
     <?php include 'navbar.php'; ?>
     <div class="containter-fluid">
-        <div class="col-md-6" id="jobList">
+        <div class="col-md-12" id="jobList">
+            <h1>All jobs (including those completed)</h1>
             <?php
 
             // Create the query - here we grab everything from the table
-            $stmt = $db->query('SELECT * FROM tbl_Job WHERE tbl_Job.JobId =' . $_GET['JobId']);
+            $stmt = $db->query('SELECT * FROM tbl_Job WHERE tbl_Job.JobAssignedTo = ""');
 
             while($rows = $stmt->fetch()){
-                echo '<a href="job.php?JobId=' .$rows['JobId'] . '"><div class="container-fluid">';
-                echo '<div class="col-md-8">';
-                echo $rows['JobName'];
-                echo '</div>';
-
-                echo '<div class="col-md-4">';
-                echo $rows['JobStatus'];
-                echo '</div>';
-
-                echo '<div class="col-md-11 col-md-offset-1">';
-                echo $rows['JobDescription'];
-                echo '</div>';
-                echo '</div></a>';
-
-                // This is for the empty line after the job
-                echo '<a href=""><div class="row-fluid">';
-                echo '<div class="col-md-4">';
-                echo '&nbsp';
-                echo '</div>';
-                echo '<div class="col-md-8">';
-                echo '&nbsp';
-                echo '</div>';
-                echo '</div></a>';
+                jobCell($rows);
             };
             ?>
         </div>
-
     </div>
     <!-- Latest compiled and minified JavaScript -->
     <script src="jquery-2.2.3.js"></script>
